@@ -54,7 +54,7 @@ export default function TestimonialCardAssignment() {
       <div className="space-y-8">
         <div>
           <h2 className="text-2xl font-semibold mb-4">Preview</h2>
-          <div className="p-6 bg-gray-50 rounded-lg border">
+          <div className="p-6 bg-gray-50">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {testData.map((testimonial) => (
                 <TestimonialCard
@@ -71,24 +71,58 @@ export default function TestimonialCardAssignment() {
 
         <div>
           <h2 className="text-2xl font-semibold mb-4">Documentation</h2>
-          <div className="bg-white border rounded-lg p-6">
+          <div className="bg-white rounded-lg p-6">
             <div className="prose max-w-none">
-              <ReactMarkdown 
+              <ReactMarkdown
                 components={{
-                  h1: ({children}) => <h1 className="text-3xl font-bold text-gray-900 mb-6 mt-8 border-b border-gray-200 pb-2">{children}</h1>,
-                  h2: ({children}) => <h2 className="text-2xl font-semibold text-gray-800 mb-4 mt-6">{children}</h2>,
-                  h3: ({children}) => <h3 className="text-xl font-medium text-gray-700 mb-3 mt-5">{children}</h3>,
-                  p: ({children}) => <p className="text-gray-700 mb-4 leading-relaxed">{children}</p>,
-                  ul: ({children}) => <ul className="list-disc list-inside mb-4 space-y-2">{children}</ul>,
-                  li: ({children}) => <li className="text-gray-700">{children}</li>,
-                  code: ({children, className}) => {
-                    const isBlock = className?.includes('language-');
+                  h1: ({ children }) => (
+                    <h1 className="text-3xl font-bold text-gray-900 mb-6 mt-8 border-b border-gray-200 pb-2">
+                      {children}
+                    </h1>
+                  ),
+                  h2: ({ children }) => (
+                    <h2 className="text-2xl font-semibold text-gray-800 mb-4 mt-6">
+                      {children}
+                    </h2>
+                  ),
+                  h3: ({ children }) => (
+                    <h3 className="text-xl font-medium text-gray-700 mb-3 mt-5">
+                      {children}
+                    </h3>
+                  ),
+                  p: ({ children }) => (
+                    <p className="text-gray-700 mb-4 leading-relaxed">
+                      {children}
+                    </p>
+                  ),
+                  ul: ({ children }) => (
+                    <ul className="list-disc list-inside mb-4 space-y-2">
+                      {children}
+                    </ul>
+                  ),
+                  li: ({ children }) => (
+                    <li className="text-gray-700">{children}</li>
+                  ),
+                  code: ({ children, className }) => {
+                    const isBlock = className?.includes("language-");
                     if (isBlock) {
-                      return <code className="block bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">{children}</code>;
+                      return (
+                        <code className="block bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto">
+                          {children}
+                        </code>
+                      );
                     }
-                    return <code className="bg-gray-100 text-gray-900 px-1 py-0.5 rounded text-sm">{children}</code>;
+                    return (
+                      <code className="bg-gray-100 text-gray-900 px-1 py-0.5 rounded text-sm">
+                        {children}
+                      </code>
+                    );
                   },
-                  pre: ({children}) => <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4">{children}</pre>,
+                  pre: ({ children }) => (
+                    <pre className="bg-gray-900 text-gray-100 p-4 rounded-lg overflow-x-auto mb-4">
+                      {children}
+                    </pre>
+                  ),
                 }}
               >
                 {readmeContent}
