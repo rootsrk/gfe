@@ -5,11 +5,13 @@ This script automatically generates a new assign5. **Run `pnpm run dev`** to see
 ## Usage
 
 ### Using pnpm script (recommended):
+
 ```bash
 pnpm run generate:assignment "button-component"
 ```
 
 ### Using tsx directly:
+
 ```bash
 npx tsx scripts/generate-assignment.ts "modal-dialog"
 ```
@@ -20,11 +22,13 @@ The generator will:
 
 1. **Auto-increment the assignment number** (01, 02, 03, etc.)
 2. **Convert your input to proper naming conventions**:
+
    - `"button component"` → `02-button-component` (folder)
    - `"button component"` → `Button Component` (display name)
    - `"button component"` → `ButtonComponentComponent` (React component)
 
 3. **Create a complete assignment structure**:
+
    ```
    src/assignments/02-button-component/
    ├── index.tsx              # Main assignment page

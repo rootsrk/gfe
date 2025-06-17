@@ -7,86 +7,35 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Type definitions
-interface AssignmentConfig {
-  assignmentName: string;
-  kebabCaseName: string;
-  titleCaseName: string;
-  pascalCaseName: string;
-  componentName: string;
-  folderName: string;
-  nextNumber: number;
-  currentDate: string;
-  assignmentPath: string;
-}
-
-// Utility functions
-const toKebabCase = (str: string): string => {
-  return str
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-|-$/g, "");
-};
-
-const toTitleCase = (kebabStr: string): string => {
-  return kebabStr
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ");
-};
-
-const toPascalCase = (kebabStr: string): string => {
-  return kebabStr
-    .split("-")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join("");
-};
-
-const findNextAssignmentNumber = (assignmentsDir: string): number => {
-  const existingAssignments = fs
-    .readdirSync(assignmentsDir)
-    .filter((dir) => fs.statSync(path.join(assignmentsDir, dir)).isDirectory())
-    .filter((dir) => /^\d{2}-/.test(dir))
-    .map((dir) => parseInt(dir.split("-")[0]))
-    .sort((a, b) => a - b);
-
-  return existingAssignments.length > 0
-    ? Math.max(...existingAssignments) + 1
-    : 1;
-};
-
 // Get the assignment name from command line arguments
-const assignmentName: string = process.argv[2];
+const assignmentName = process.argv[2];
 
 if (!assignmentName) {
   console.error("❌ Please provide an assignment name");
-  console.log('Usage: npm run generate:assignment "assignment-name"');
+  console.log('Usage: node scripts/generate-assignment.js "assignment-name"');
   process.exit(1);
 }
 
-// Setup assignment configuration
+// Convert to kebab-case
+const kebabCaseName = assignmentName
+  .toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-")
+  .replace(/^-|-$/g, "");
+
+// Find the next assignment number
 const assignmentsDir = path.join(__dirname, "../src/assignments");
-const kebabCaseName = toKebabCase(assignmentName);
-const titleCaseName = toTitleCase(kebabCaseName);
-const pascalCaseName = toPascalCase(kebabCaseName);
-const componentName = `${pascalCaseName}Component`;
-const nextNumber = findNextAssignmentNumber(assignmentsDir);
+const existingAssignments = fs
+  .readdirSync(assignmentsDir)
+  .filter((dir) => fs.statSync(path.join(assignmentsDir, dir)).isDirectory())
+  .filter((dir) => /^\d{2}-/.test(dir))
+  .map((dir) => parseInt(dir.split("-")[0]))
+  .sort((a, b) => a - b);
+
+const nextNumber =
+  existingAssignments.length > 0 ? Math.max(...existingAssignments) + 1 : 1;
 const paddedNumber = nextNumber.toString().padStart(2, "0");
 const folderName = `${paddedNumber}-${kebabCaseName}`;
 const assignmentPath = path.join(assignmentsDir, folderName);
-const currentDate = new Date().toISOString().split("T")[0];
-
-const config: AssignmentConfig = {
-  assignmentName,
-  kebabCaseName,
-  titleCaseName,
-  pascalCaseName,
-  componentName,
-  folderName,
-  nextNumber,
-  currentDate,
-  assignmentPath,
-};
 
 // Create the assignment folder
 if (fs.existsSync(assignmentPath)) {
@@ -96,19 +45,34 @@ if (fs.existsSync(assignmentPath)) {
 
 fs.mkdirSync(assignmentPath, { recursive: true });
 
-// Template generation function
-const generateTemplates = (
-  config: AssignmentConfig
-): Record<string, string> => ({
+// Convert kebab-case to Title Case for display
+const titleCaseName = kebabCaseName
+  .split("-")
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join(" ");
+
+// Convert kebab-case to PascalCase for component names
+const pascalCaseName = kebabCaseName
+  .split("-")
+  .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+  .join("");
+
+const componentName = `${pascalCaseName}Component`;
+
+// Get current date
+const currentDate = new Date().toISOString().split("T")[0];
+
+// File templates
+const templates = {
   "metadata.ts": `export const metadata = {
-  title: "${config.titleCaseName}",
-  description: "A reusable ${config.titleCaseName.toLowerCase()} component with modern design and functionality",
+  title: "${titleCaseName}",
+  description: "A reusable ${titleCaseName.toLowerCase()} component with modern design and functionality",
   difficulty: "Medium",
   tags: ["React", "TypeScript", "Tailwind CSS"],
-  dateCreated: "${config.currentDate}",
+  dateCreated: "${currentDate}",
 };`,
 
-  "index.tsx": `import { ${config.componentName} } from "../../components/${config.componentName}";
+  "index.tsx": `import { ${componentName} } from "../../components/${componentName}";
 import { metadata } from "./metadata";
 import ReactMarkdown from "react-markdown";
 import readmeContent from "./README.md?raw";
@@ -125,7 +89,7 @@ const testData = [
   },
 ];
 
-export default function ${config.pascalCaseName}Assignment() {
+export default function ${pascalCaseName}Assignment() {
   return (
     <div className="max-w-4xl mx-auto p-6">
       <div className="mb-8">
@@ -155,7 +119,7 @@ export default function ${config.pascalCaseName}Assignment() {
               <div className="p-4 border border-dashed border-gray-300 rounded-lg text-center text-gray-500">
                 <p>Implement your {metadata.title} component here</p>
                 <p className="text-sm mt-2">
-                  Create the component at: src/components/${config.componentName}.tsx
+                  Create the component at: src/components/${componentName}.tsx
                 </p>
               </div>
             </div>
@@ -194,15 +158,15 @@ export default function ${config.pascalCaseName}Assignment() {
   );
 }`,
 
-  "README.md": `# ${config.titleCaseName}
+  "README.md": `# ${titleCaseName}
 
 ## Overview
 
-This assignment focuses on creating a reusable ${config.titleCaseName.toLowerCase()} component with modern design and functionality.
+This assignment focuses on creating a reusable ${titleCaseName.toLowerCase()} component with modern design and functionality.
 
 ## Requirements
 
-- Create a responsive ${config.titleCaseName.toLowerCase()} component
+- Create a responsive ${titleCaseName.toLowerCase()} component
 - Clean and modern design
 - Proper TypeScript types
 - Responsive design that works on mobile and desktop
@@ -241,7 +205,7 @@ Add any advanced implementation details, patterns, or techniques used in this co
 Run the tests with:
 
 \`\`\`bash
-npm test -- ${config.componentName}
+npm test -- ${componentName}
 \`\`\`
 
 ## Storybook
@@ -252,18 +216,16 @@ View the component in Storybook:
 npm run storybook
 \`\`\``,
 
-  [`${config.componentName}.test.tsx`]: `import { render, screen } from '@testing-library/react';
-import { ${config.componentName} } from '../../components/${
-    config.componentName
-  }';
+  [`${componentName}.test.tsx`]: `import { render, screen } from '@testing-library/react';
+import { ${componentName} } from '../../components/${componentName}';
 
-describe('${config.componentName}', () => {
+describe('${componentName}', () => {
   const mockProps = {
     // Add your component's required props here
   };
 
-  it('renders ${config.titleCaseName.toLowerCase()} component', () => {
-    render(<${config.componentName} {...mockProps} />);
+  it('renders ${titleCaseName.toLowerCase()} component', () => {
+    render(<${componentName} {...mockProps} />);
     
     // Add your test assertions here
     expect(screen.getByRole('region')).toBeInTheDocument();
@@ -271,33 +233,31 @@ describe('${config.componentName}', () => {
 
   it('applies custom className when provided', () => {
     const { container } = render(
-      <${config.componentName} {...mockProps} className="custom-class" />
+      <${componentName} {...mockProps} className="custom-class" />
     );
     
     expect(container.firstChild).toHaveClass('custom-class');
   });
 
   it('renders without crashing when minimal props provided', () => {
-    render(<${config.componentName} {...mockProps} />);
+    render(<${componentName} {...mockProps} />);
     
     // Should not crash
     expect(screen.getByRole('region')).toBeInTheDocument();
   });
 });`,
 
-  [`${config.componentName}.stories.tsx`]: `import type { Meta, StoryObj } from '@storybook/react';
-import { ${config.componentName} } from '../../components/${
-    config.componentName
-  }';
+  [`${componentName}.stories.tsx`]: `import type { Meta, StoryObj } from '@storybook/react';
+import { ${componentName} } from '../../components/${componentName}';
 
-const meta: Meta<typeof ${config.componentName}> = {
-  title: 'Assignments/${config.componentName}',
-  component: ${config.componentName},
+const meta: Meta<typeof ${componentName}> = {
+  title: 'Assignments/${componentName}',
+  component: ${componentName},
   parameters: {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A reusable ${config.titleCaseName.toLowerCase()} component with modern design and functionality.',
+        component: 'A reusable ${titleCaseName.toLowerCase()} component with modern design and functionality.',
       },
     },
   },
@@ -330,16 +290,13 @@ export const WithCustomStyling: Story = {
 export const Multiple: Story = {
   render: () => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl">
-      <${config.componentName} />
-      <${config.componentName} />
-      <${config.componentName} />
+      <${componentName} />
+      <${componentName} />
+      <${componentName} />
     </div>
   ),
 };`,
-});
-
-// Generate templates
-const templates = generateTemplates(config);
+};
 
 // Create all files
 Object.entries(templates).forEach(([filename, content]) => {
