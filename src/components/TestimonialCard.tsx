@@ -52,7 +52,7 @@ export function TestimonialCard({
           <p className="text-sm font-normal">{subtitle}</p>
         </div>
       </div>
-      <div className="text-base text-neutral-700">{content}</div>
+      <p className="text-base text-neutral-700">{content}</p>
     </div>
   );
 }
