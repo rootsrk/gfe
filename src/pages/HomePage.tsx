@@ -221,7 +221,7 @@ export function HomePage() {
               💼
             </a>
             <a
-              href="https://github.com"
+              href="https://github.com/rootsrk"
               target="_blank"
               rel="noopener noreferrer"
               className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:-translate-y-1 cursor-pointer"
@@ -229,7 +229,7 @@ export function HomePage() {
               🐱
             </a>
             <a
-              href="mailto:sumedha.kulkarni@example.com"
+              href="mailto:sumedha.rk.05@gmail.com"
               className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-all duration-300 hover:scale-110 hover:shadow-lg hover:-translate-y-1 cursor-pointer"
             >
               📧
