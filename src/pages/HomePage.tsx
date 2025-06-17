@@ -89,15 +89,20 @@ export function HomePage() {
               </span>
             </h1>
             <p className="text-xl md:text-2xl text-white/90 mb-6 max-w-3xl mx-auto">
-              Platform Engineer & Frontend Developer specializing in build
-              optimization, CI/CD pipelines, and developer experience
+              Platform Engineer & Frontend Developer specializing in building
+              nuanced UIs, build optimization, CI/CD pipelines, performance and
+              developer experience.
+            </p>
+            <p className="text-lg text-white/80 mb-6 max-w-2xl mx-auto italic">
+              "I optimize builds faster than I optimize my sleep schedule! ⚡😴"
+              - Sumedha
             </p>
           </div>
 
           {/* Quick Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 max-w-2xl mx-auto">
             <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-white hover:bg-white/30 transition-all duration-300 hover:scale-105 hover:shadow-lg">
-              <div className="text-2xl font-bold">5+</div>
+              <div className="text-2xl font-bold">6+</div>
               <div className="text-sm opacity-90">Years Experience</div>
             </div>
             <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-white hover:bg-white/30 transition-all duration-300 hover:scale-105 hover:shadow-lg">
