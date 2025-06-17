@@ -1,6 +1,3 @@
-// This function will be used to dynamically import assignment components
-// In a real Vite app, we can use import.meta.glob to get all assignment files
-
 export interface Assignment {
   id: string;
   name: string;
@@ -25,7 +22,6 @@ export interface AssignmentWithMetadata {
   metadata: AssignmentMetadata;
 }
 
-// Use Vite's import.meta.glob to dynamically discover assignment folders
 const assignmentModules = import.meta.glob("./*/index.tsx");
 const assignmentMetadata = import.meta.glob("./*/metadata.ts");
 
@@ -45,13 +41,20 @@ export const getAssignments = (): Assignment[] => {
       id: folderName,
       name,
       path: `/${folderName}`,
-      component: assignmentModules[path] as () => Promise<{ default: React.ComponentType }>,
-      metadata: (assignmentMetadata[metadataPath] || (() => Promise.resolve({ metadata: {} }))) as () => Promise<{ metadata: AssignmentMetadata }>
+      component: assignmentModules[path] as () => Promise<{
+        default: React.ComponentType;
+      }>,
+      metadata: (assignmentMetadata[metadataPath] ||
+        (() => Promise.resolve({ metadata: {} }))) as () => Promise<{
+        metadata: AssignmentMetadata;
+      }>,
     };
   });
 };
 
-export const getAssignmentWithMetadata = async (assignment: Assignment): Promise<AssignmentWithMetadata> => {
+export const getAssignmentWithMetadata = async (
+  assignment: Assignment
+): Promise<AssignmentWithMetadata> => {
   try {
     const metadataModule = await assignment.metadata();
     return {
@@ -78,7 +81,9 @@ export const getAssignmentWithMetadata = async (assignment: Assignment): Promise
   }
 };
 
-export const getAssignmentsWithMetadata = async (): Promise<AssignmentWithMetadata[]> => {
+export const getAssignmentsWithMetadata = async (): Promise<
+  AssignmentWithMetadata[]
+> => {
   const assignments = getAssignments();
   return Promise.all(assignments.map(getAssignmentWithMetadata));
 };

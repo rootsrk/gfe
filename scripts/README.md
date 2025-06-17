@@ -1,17 +1,17 @@
 # Assignment Generator
 
-This script automatically generates a new assignment folder with all the necessary files and structure.
+This script automatically generates a new assign5. **Run `pnpm run dev`** to see your assignment in the browserent folder with all the necessary files and structure.
 
 ## Usage
 
-### Using npm script (recommended):
+### Using pnpm script (recommended):
 ```bash
-npm run generate:assignment "button-component"
+pnpm run generate:assignment "button-component"
 ```
 
-### Using node directly:
+### Using tsx directly:
 ```bash
-node scripts/generate-assignment.js "modal-dialog"
+npx tsx scripts/generate-assignment.ts "modal-dialog"
 ```
 
 ## What it creates
@@ -54,13 +54,13 @@ The generator will:
 
 ```bash
 # Creates: 02-contact-form/
-npm run generate:assignment "contact form"
+pnpm run generate:assignment "contact form"
 
 # Creates: 03-image-gallery/
-npm run generate:assignment "image gallery"
+pnpm run generate:assignment "image gallery"
 
 # Creates: 04-navigation-menu/
-npm run generate:assignment "navigation-menu"
+pnpm run generate:assignment "navigation-menu"
 ```
 
 ## Next Steps After Generation
